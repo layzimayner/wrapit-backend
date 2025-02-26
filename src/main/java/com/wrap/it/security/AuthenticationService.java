@@ -2,14 +2,13 @@ package com.wrap.it.security;
 
 import com.wrap.it.dto.user.UserLoginRequestDto;
 import com.wrap.it.dto.user.UserLoginResponseDto;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
