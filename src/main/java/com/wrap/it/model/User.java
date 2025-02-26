@@ -33,7 +33,7 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String phoneNumber;
 
     @Column(nullable = false)
     private String password;
@@ -43,6 +43,10 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String lastName;
+
+    private String middleName;
+
+    private String city;
 
     @ManyToMany
     @JoinTable(
@@ -63,7 +67,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return phoneNumber;
     }
 
     @Override

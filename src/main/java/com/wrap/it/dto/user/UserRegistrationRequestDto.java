@@ -19,4 +19,9 @@ public class UserRegistrationRequestDto {
     private String firstName;
     @NotBlank
     private String lastName;
+
+    private String middleName;
+
+    private String shippingAddress;
+
 }
