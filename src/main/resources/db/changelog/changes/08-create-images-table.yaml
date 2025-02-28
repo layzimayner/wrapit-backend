@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-images-table
+      author: coder
+      changes:
+        - createTable:
+            tableName: images
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: image_url
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: item_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: images
+            baseColumnNames: item_id
+            referencedTableName: items
+            referencedColumnNames: id
+            constraintName: fk_images_items

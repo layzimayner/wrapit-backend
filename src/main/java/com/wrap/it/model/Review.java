@@ -8,12 +8,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -41,4 +40,7 @@ public class Review {
 
     @Column(nullable = false, updatable = false)
     private final LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+    private boolean isDeleted = false;
 }
