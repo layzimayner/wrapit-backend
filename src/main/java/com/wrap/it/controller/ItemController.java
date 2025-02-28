@@ -1,5 +1,8 @@
 package com.wrap.it.controller;
 
+import com.wrap.it.dto.item.ItemDto;
+import com.wrap.it.dto.item.ItemRequest;
+import com.wrap.it.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RequiredArgsConstructor
 public class ItemController {
+    private ItemService itemService;
 
     @PostMapping
     @Operation(summary = "Create item", description = "Add new item to DB")
