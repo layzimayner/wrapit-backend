@@ -25,8 +25,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserRegistrationDto save(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
-        if (userRepository.existsByEmail(requestDto.getEmail())) {
-            throw new RegistrationException("Email is already in use");
+        if (userRepository.existsByPhoneNumber(requestDto.getPhoneNumber())) {
+            throw new RegistrationException("Phone number is already in use");
         }
         User user = userMapper.toModel(requestDto);
         user.setRoles(Set.of(roleRepository.findByName(Role.RoleName.USER)));

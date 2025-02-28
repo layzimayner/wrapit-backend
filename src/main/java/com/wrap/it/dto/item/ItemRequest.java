@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.Set;
+import lombok.Data;
 
+@Data
 public class ItemRequest {
     @NotBlank
     private String name;
@@ -16,6 +18,8 @@ public class ItemRequest {
     @Positive
     private BigDecimal price;
 
-    @NotNull
-    private Set<String> images;
+    @NotBlank
+    private String mainImageUrl;
+
+    private Set<String> imageUrls;
 }
