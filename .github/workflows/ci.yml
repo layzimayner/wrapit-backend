@@ -7,12 +7,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           java-version: '17'
           distribution: 'adopt'
           cache: maven
+
+      - name: Set environment variables
+        env:
+          MYSQLDB_DATABASE: ${{ secrets.MYSQLDB_DATABASE }}
+          MYSQLDB_USER: ${{ secrets.MYSQLDB_USER }}
+          MYSQLDB_ROOT_PASSWORD: ${{ secrets.MYSQLDB_ROOT_PASSWORD }}
+          DB_URL_ADDRESS: ${{ secrets.DB_URL_ADDRESS }}
+          SPRING_DATASOURCE_DRIVER: ${{ secrets.SPRING_DATASOURCE_DRIVER }}
+        run: echo "Environment variables set"
+
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify
+        env:
+          MYSQLDB_DATABASE: ${{ secrets.MYSQLDB_DATABASE }}
+          MYSQLDB_USER: ${{ secrets.MYSQLDB_USER }}
+          MYSQLDB_ROOT_PASSWORD: ${{ secrets.MYSQLDB_ROOT_PASSWORD }}
+          DB_URL_ADDRESS: ${{ secrets.DB_URL_ADDRESS }}
+          SPRING_DATASOURCE_DRIVER: ${{ secrets.SPRING_DATASOURCE_DRIVER }}
+

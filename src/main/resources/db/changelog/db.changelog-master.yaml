@@ -11,3 +11,9 @@ databaseChangeLog:
       file: db/changelog/changes/05-insert-users.yaml
   - include:
       file: db/changelog/changes/06-insert-users-roles.yaml
+  - include:
+      file: db/changelog/changes/07-create-items-table.yaml
+  - include:
+      file: db/changelog/changes/08-create-images-table.yaml
+  - include:
+      file: db/changelog/changes/09-create-reviews-table.yaml
