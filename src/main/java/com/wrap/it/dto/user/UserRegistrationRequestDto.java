@@ -1,16 +1,16 @@
 package com.wrap.it.dto.user;
 
 import com.wrap.it.annotation.PasswordMatches;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
 @PasswordMatches
 public class UserRegistrationRequestDto {
     @NotBlank
-    @Email
-    private String email;
+    @Pattern(regexp = "^\\+?[0-9]{7,15}$", message = "Invalid phone format")
+    private String phoneNumber;
     @NotBlank
     private String password;
     @NotBlank

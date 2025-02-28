@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-reviews-table
+      id: save-reviews-table
       author: coder
       changes:
         - createTable:

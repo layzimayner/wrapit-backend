@@ -4,5 +4,5 @@ import com.wrap.it.dto.item.ItemDto;
 import com.wrap.it.dto.item.ItemRequest;
 
 public interface ItemService {
-    ItemDto create(ItemRequest request);
+    ItemDto save(ItemRequest request);
 }

@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-images-table
+      id: save-images-table
       author: coder
       changes:
         - createTable:
@@ -29,3 +29,4 @@ databaseChangeLog:
             referencedTableName: items
             referencedColumnNames: id
             constraintName: fk_images_items
+            onDelete: CASCADE

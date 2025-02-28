@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-users-table
+      id: save-users-table
       author: coder
       changes:
         - createTable:
@@ -14,7 +14,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: phoneNumber
+                  name: phone_number
                   type: VARCHAR(255)
                   constraints:
                     nullable: false

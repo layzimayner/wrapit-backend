@@ -39,8 +39,14 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: main_image_url
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
                   name: is_deleted
                   type: TINYINT(1)
                   defaultValue: 0
                   constraints:
                     nullable: false
+

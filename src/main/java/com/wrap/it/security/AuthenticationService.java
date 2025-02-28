@@ -18,7 +18,8 @@ public class AuthenticationService {
 
     public UserLoginResponseDto authenticate(UserLoginRequestDto requestDto) {
         final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(requestDto.email(), requestDto.password())
+                new UsernamePasswordAuthenticationToken(requestDto.phoneNumber(),
+                        requestDto.password())
         );
         List<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

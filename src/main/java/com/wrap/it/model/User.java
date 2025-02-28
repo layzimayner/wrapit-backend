@@ -46,7 +46,7 @@ public class User implements UserDetails {
 
     private String middleName;
 
-    private String city;
+    private String shippingAddress;
 
     @ManyToMany
     @JoinTable(
