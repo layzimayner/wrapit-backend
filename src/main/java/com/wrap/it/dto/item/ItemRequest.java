@@ -22,4 +22,7 @@ public class ItemRequest {
     private String mainImageUrl;
 
     private Set<String> imageUrls;
+
+    @Positive
+    private Set<Long> categoriesIds;
 }

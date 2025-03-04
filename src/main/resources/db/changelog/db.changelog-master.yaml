@@ -17,3 +17,7 @@ databaseChangeLog:
       file: db/changelog/changes/08-create-images-table.yaml
   - include:
       file: db/changelog/changes/09-create-reviews-table.yaml
+  - include:
+      file: db/changelog/changes/10-create-categories-table.yaml
+  - include:
+      file: db/changelog/changes/11-create-items-categories-table.yaml
