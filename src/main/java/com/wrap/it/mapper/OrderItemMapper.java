@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 @Mapper(config = MapperConfig.class)
 public interface OrderItemMapper {
     @Mapping(target = "orderItemId", source = "id")
-    @Mapping(target = "bookId", source = "book.id")
+    @Mapping(target = "itemId", source = "item.id")
     OrderItemDto toDto(OrderItem orderItem);
 
     List<OrderItemDto> toDtos(List<OrderItem> orderItems);

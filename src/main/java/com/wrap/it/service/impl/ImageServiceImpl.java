@@ -1,6 +1,7 @@
 package com.wrap.it.service.impl;
 
 import com.wrap.it.dto.image.ImageDto;
+import com.wrap.it.exception.EntityNotFoundException;
 import com.wrap.it.mapper.ImageMapper;
 import com.wrap.it.model.Image;
 import com.wrap.it.model.Item;
@@ -30,6 +31,13 @@ public class ImageServiceImpl implements ImageService {
         imageRepository.saveAll(images);
 
         return images.stream()
+                .map(imageMapper::toDtoWithoutItemId)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<ImageDto> getImagesById(Long id) {
+        return imageRepository.findAllById(id).stream()
                 .map(imageMapper::toDtoWithoutItemId)
                 .collect(Collectors.toSet());
     }

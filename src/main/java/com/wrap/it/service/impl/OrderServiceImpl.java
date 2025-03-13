@@ -1,9 +1,16 @@
 package com.wrap.it.service.impl;
 
+import com.wrap.it.dto.item.order.OrderItemDto;
+import com.wrap.it.dto.order.ChangeOrderStatusRequestDto;
 import com.wrap.it.dto.order.OrderDto;
 import com.wrap.it.dto.order.PlaceOrderRequestDto;
+import com.wrap.it.exception.EntityNotFoundException;
 import com.wrap.it.mapper.OrderItemMapper;
 import com.wrap.it.mapper.OrderMapper;
+import com.wrap.it.model.Order;
+import com.wrap.it.model.OrderItem;
+import com.wrap.it.model.ShoppingCart;
+import com.wrap.it.model.User;
 import com.wrap.it.repository.OrderItemRepository;
 import com.wrap.it.repository.OrderRepository;
 import com.wrap.it.repository.ShoppingCartRepository;

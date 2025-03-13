@@ -1,8 +1,8 @@
 package com.wrap.it.controller;
 
 import com.wrap.it.dto.item.ItemDto;
-import com.wrap.it.dto.item.ItemDtoWithoutCategoryIds;
 import com.wrap.it.dto.item.ItemRequest;
+import com.wrap.it.dto.item.SlimItemDto;
 import com.wrap.it.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,7 +43,7 @@ public class ItemController {
 
     @GetMapping
     @Operation(summary = "Get all items", description = "Get a list of all available items")
-    public Page<ItemDtoWithoutCategoryIds> getAllItems(Pageable pageable) {
+    public Page<SlimItemDto> getAllItems(Pageable pageable) {
         return itemService.findAll(pageable);
     }
 

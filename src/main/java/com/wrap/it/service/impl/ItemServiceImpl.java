@@ -1,9 +1,10 @@
 package com.wrap.it.service.impl;
 
+import com.wrap.it.dto.category.CategoryItemRequest;
 import com.wrap.it.dto.image.ImageDto;
 import com.wrap.it.dto.item.ItemDto;
-import com.wrap.it.dto.item.ItemDtoWithoutCategoryIds;
 import com.wrap.it.dto.item.ItemRequest;
+import com.wrap.it.dto.item.SlimItemDto;
 import com.wrap.it.exception.EntityNotFoundException;
 import com.wrap.it.mapper.ItemMapper;
 import com.wrap.it.model.Item;
@@ -32,14 +33,14 @@ public class ItemServiceImpl implements ItemService {
 
         Set<ImageDto> imagesDto = imageService.save(request.getImageUrls(), item);
 
-        return imagesDto == null ? itemMapper.toDto(item) : itemMapper.toDtoWithImages(
+        return imagesDto == null ? itemMapper.toDto(item) : itemMapper.toInitDto(
                 item, imagesDto);
     }
 
     @Override
-    public Page<ItemDtoWithoutCategoryIds> findAll(Pageable pageable) {
+    public Page<SlimItemDto> findAll(Pageable pageable) {
         return itemRepository.findAll(pageable)
-                .map(itemMapper::toDtoWithoutCategories);
+                .map(itemMapper::toSlimDto);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class ItemServiceImpl implements ItemService {
 
         Set<ImageDto> imagesDto = imageService.save(requestDto.getImageUrls(), item);
 
-        return imagesDto == null ? itemMapper.toDto(item) : itemMapper.toDtoWithImages(
+        return imagesDto == null ? itemMapper.toDto(item) : itemMapper.toInitDto(
                 item, imagesDto);
     }
 
@@ -72,12 +73,13 @@ public class ItemServiceImpl implements ItemService {
                 new EntityNotFoundException("Can't find item with id "
                         + id + " because it does not exist")
         );
-        return itemMapper.toDto(item);
+        return itemMapper.toInitDto(item,imageService.getImagesById(id));
     }
 
     @Override
-    public List<ItemDtoWithoutCategoryIds> getItemsByCategoryIds(Set<Long> categoryIds,
-                                                                 Pageable pageable) {
-        return List.of();
+    public Page<SlimItemDto> getItemsByCategoryIds(CategoryItemRequest request, Pageable pageable) {
+        return itemRepository.findByCategoryIdIn(request.categoryIds(),
+                        request.categoryIds().size(), pageable)
+                .map(itemMapper::toSlimDto);
     }
 }

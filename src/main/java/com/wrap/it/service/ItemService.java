@@ -1,17 +1,16 @@
 package com.wrap.it.service;
 
+import com.wrap.it.dto.category.CategoryItemRequest;
 import com.wrap.it.dto.item.ItemDto;
-import com.wrap.it.dto.item.ItemDtoWithoutCategoryIds;
 import com.wrap.it.dto.item.ItemRequest;
-import java.util.List;
-import java.util.Set;
+import com.wrap.it.dto.item.SlimItemDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ItemService {
     ItemDto save(ItemRequest request);
 
-    Page<ItemDtoWithoutCategoryIds> findAll(Pageable pageable);
+    Page<SlimItemDto> findAll(Pageable pageable);
 
     void delete(Long id);
 
@@ -19,6 +18,6 @@ public interface ItemService {
 
     ItemDto findById(Long id);
 
-    List<ItemDtoWithoutCategoryIds> getItemsByCategoryIds(Set<Long> categoryIds,
-                                                          Pageable pageable);
+    Page<SlimItemDto> getItemsByCategoryIds(CategoryItemRequest request,
+                                            Pageable pageable);
 }

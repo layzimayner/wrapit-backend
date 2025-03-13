@@ -1,12 +1,12 @@
 package com.wrap.it.mapper;
 
 import com.wrap.it.config.MapperConfig;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.wrap.it.dto.cart.CartDto;
 import com.wrap.it.dto.item.cart.CartItemDto;
 import com.wrap.it.model.CartItem;
 import com.wrap.it.model.ShoppingCart;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,8 +16,8 @@ public interface CartMapper {
     @Mapping(source = "shoppingCart.id", target = "cartId")
     CartDto toDto(ShoppingCart shoppingCart);
 
-    @Mapping(source = "book.id", target = "bookId")
-    @Mapping(source = "book.title", target = "bookTitle")
+    @Mapping(source = "item.id", target = "itemId")
+    @Mapping(source = "item.name", target = "name")
     CartItemDto toCartItemDto(CartItem cartItem);
 
     default Set<CartItemDto> mapCartItemsToDto(Set<CartItem> cartItems) {

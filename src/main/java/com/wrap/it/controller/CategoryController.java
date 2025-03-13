@@ -1,15 +1,15 @@
 package com.wrap.it.controller;
 
 import com.wrap.it.dto.category.CategoryDto;
+import com.wrap.it.dto.category.CategoryItemRequest;
 import com.wrap.it.dto.category.CreateCategoryRequestDto;
-import com.wrap.it.dto.item.ItemDtoWithoutCategoryIds;
+import com.wrap.it.dto.item.SlimItemDto;
 import com.wrap.it.service.CategoryService;
 import com.wrap.it.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -76,9 +76,9 @@ public class CategoryController {
     @GetMapping("/items")
     @Operation(summary = "Get a page of items by category",
             description = "Returns a page of items that have the corresponding category IDs")
-    public List<ItemDtoWithoutCategoryIds> getItemsByCategoryIds(
-            @RequestBody @Positive Set<Long> categoryIds, Pageable pageable) {
-        return itemService.getItemsByCategoryIds(categoryIds, pageable);
+    public Page<SlimItemDto> getItemsByCategoryIds(
+            @RequestBody CategoryItemRequest request, Pageable pageable) {
+        return itemService.getItemsByCategoryIds(request, pageable);
     }
 }
 

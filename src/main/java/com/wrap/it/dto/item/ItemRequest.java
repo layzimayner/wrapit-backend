@@ -1,6 +1,7 @@
 package com.wrap.it.dto.item;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
@@ -23,6 +24,6 @@ public class ItemRequest {
 
     private Set<String> imageUrls;
 
-    @Positive
+    @NotEmpty
     private Set<Long> categoriesIds;
 }

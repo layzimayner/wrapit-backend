@@ -34,7 +34,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: average_rating
-                  type: smallint
+                  type: double
                   defaultValueNumeric: 0
                   constraints:
                     nullable: false

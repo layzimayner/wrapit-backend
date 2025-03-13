@@ -6,4 +6,6 @@ import java.util.Set;
 
 public interface ImageService {
     Set<ImageDto> save(Set<String> imageUrls, Item item);
+
+    Set<ImageDto> getImagesById(Long id);
 }

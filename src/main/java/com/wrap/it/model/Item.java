@@ -39,7 +39,7 @@ public class Item {
 
     private int totalReviews;
 
-    private short averageRating;
+    private double averageRating;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted = false;

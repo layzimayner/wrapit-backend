@@ -51,7 +51,7 @@ public class CartServiceImpl implements CartService {
                         "Item not found with ID: " + requestDto.getItemId()));
 
         CartItem cartItem = shoppingCart.getCartItems().stream()
-                .filter(cItem -> cItem.getItem().getId().equals(item.getId()))
+                .filter(i -> i.getItem().getId().equals(item.getId()))
                 .findFirst()
                 .orElse(null);
 

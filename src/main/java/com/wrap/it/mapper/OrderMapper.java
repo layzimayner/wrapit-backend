@@ -1,19 +1,18 @@
 package com.wrap.it.mapper;
 
-import com.example.demo.config.MapperConfig;
-import com.example.demo.dto.item.OrderItemDto;
-import com.example.demo.dto.order.OrderDto;
-import com.example.demo.model.Order;
-import com.example.demo.model.OrderItem;
-import com.example.demo.model.ShoppingCart;
-import com.example.demo.model.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-
+import com.wrap.it.config.MapperConfig;
+import com.wrap.it.dto.item.order.OrderItemDto;
+import com.wrap.it.dto.order.OrderDto;
+import com.wrap.it.model.Order;
+import com.wrap.it.model.OrderItem;
+import com.wrap.it.model.ShoppingCart;
+import com.wrap.it.model.User;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(config = MapperConfig.class)
 public interface OrderMapper {
@@ -32,16 +31,16 @@ public interface OrderMapper {
     Order toOrder(ShoppingCart shoppingCart, String shippingAddress, User user);
 
     @Mapping(target = "orderItemId", source = "id")
-    @Mapping(target = "bookId", source = "book.id")
+    @Mapping(target = "itemId", source = "item.id")
     OrderItemDto toOrderItemDto(OrderItem orderItem);
 
     default Set<OrderItem> mapOrderItems(ShoppingCart shoppingCart, Order order) {
         return shoppingCart.getCartItems().stream()
                 .map(cartItem -> {
                     OrderItem orderItem = new OrderItem();
-                    orderItem.setBook(cartItem.getBook());
+                    orderItem.setItem(cartItem.getItem());
                     orderItem.setQuantity(cartItem.getQuantity());
-                    orderItem.setPrice(cartItem.getBook().getPrice()
+                    orderItem.setPrice(cartItem.getItem().getPrice()
                             .multiply(BigDecimal.valueOf(cartItem.getQuantity())));
                     orderItem.setOrder(order);
                     return orderItem;
