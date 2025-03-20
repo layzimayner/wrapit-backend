@@ -5,10 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -33,11 +39,19 @@ public class Item {
 
     private int totalReviews;
 
-    private short averageRating;
+    private double averageRating;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted = false;
 
     @Column(nullable = false)
     private String mainImageUrl;
+
+    @ManyToMany
+    @JoinTable(
+            name = "items_categories",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @ToString.Exclude
+    private Set<Category> categories = new HashSet<>();
 }

@@ -33,4 +33,11 @@ public class ImageServiceImpl implements ImageService {
                 .map(imageMapper::toDtoWithoutItemId)
                 .collect(Collectors.toSet());
     }
+
+    @Override
+    public Set<ImageDto> getImagesById(Long id) {
+        return imageRepository.findAllById(id).stream()
+                .map(imageMapper::toDtoWithoutItemId)
+                .collect(Collectors.toSet());
+    }
 }

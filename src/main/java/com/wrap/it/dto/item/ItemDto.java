@@ -13,4 +13,7 @@ public class ItemDto {
     private BigDecimal price;
     private String mainImageUrl;
     private Set<ImageDto> images;
+    private Set<Long> categoriesIds;
+    private int totalReviews;
+    private double averageRating;
 }

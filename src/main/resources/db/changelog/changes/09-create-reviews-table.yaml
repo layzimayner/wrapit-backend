@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: save-reviews-table
+      id: 1
       author: coder
       changes:
         - createTable:
@@ -8,7 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: BIGINT
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -20,21 +20,20 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: item_id
-                  type: bigint
+                  type: BIGINT
                   constraints:
                     nullable: false
               - column:
                   name: rating
-                  type: int
+                  type: DECIMAL(10,1)
                   constraints:
                     nullable: false
               - column:
                   name: comment
-                  type: text
+                  type: TEXT
               - column:
                   name: created_at
-                  type: datetime
-                  defaultValueComputed: CURRENT_TIMESTAMP
+                  type: DATETIME
                   constraints:
                     nullable: false
               - column:
@@ -45,13 +44,14 @@ databaseChangeLog:
                     nullable: false
         - addForeignKeyConstraint:
             baseTableName: reviews
-            baseColumnNames: user_id
-            referencedTableName: users
-            referencedColumnNames: id
-            constraintName: fk_reviews_user
-        - addForeignKeyConstraint:
-            baseTableName: reviews
             baseColumnNames: item_id
             referencedTableName: items
             referencedColumnNames: id
             constraintName: fk_reviews_item
+
+        - addForeignKeyConstraint:
+            baseTableName: reviews
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_rentals_users

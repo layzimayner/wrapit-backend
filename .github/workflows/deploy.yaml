@@ -1,0 +1,48 @@
+name: Build and Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Login to AWS ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and Push Docker Image
+        env:
+          AWS_REGION: us-east-1
+          ECR_REPOSITORY: wrap-it-api
+        run: |
+          docker build -t $ECR_REPOSITORY .
+          IMAGE_TAG=$(date +%s)
+          ECR_URI=$(aws ecr describe-repositories --query "repositories[?repositoryName=='$ECR_REPOSITORY'].repositoryUri" --output text)
+          docker tag $ECR_REPOSITORY:latest $ECR_URI:$IMAGE_TAG
+          docker push $ECR_URI:$IMAGE_TAG
+          echo "IMAGE_URI=$ECR_URI:$IMAGE_TAG" >> $GITHUB_ENV
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH into EC2 and Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
+            docker pull ${{ secrets.ECR_URI }}:${{ env.IMAGE_URI }}
+            docker stop naughty_mestorf || true
+            docker rm naughty_mestorf || true
+            docker run -d --name naughty_mestorf -p 80:8080 ${{ secrets.ECR_URI }}:${{ env.IMAGE_URI }}
+

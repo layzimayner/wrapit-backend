@@ -11,8 +11,8 @@ services:
       - "$MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT"
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$MYSQLDB_ROOT_PASSWORD"]
-      interval: 30s
-      timeout: 30s
+      interval: 10s
+      timeout: 10s
       retries: 3
 
   app:
