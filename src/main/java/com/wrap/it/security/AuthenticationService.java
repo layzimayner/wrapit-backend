@@ -2,6 +2,7 @@ package com.wrap.it.security;
 
 import com.wrap.it.dto.user.UserLoginRequestDto;
 import com.wrap.it.dto.user.UserLoginResponseDto;
+import com.wrap.it.model.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,10 +22,18 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(requestDto.phoneNumber(),
                         requestDto.password())
         );
+
         List<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
         String token = jwtUtil.generateToken(authentication.getName(), roles);
-        return new UserLoginResponseDto(token);
+
+        User user = (User)authentication.getPrincipal();
+
+        return new UserLoginResponseDto(token,
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getPhoneNumber());
     }
 }

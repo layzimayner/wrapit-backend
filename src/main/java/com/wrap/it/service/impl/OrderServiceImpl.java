@@ -61,10 +61,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderItemDto> findItemsByOrderId(Long orderId, Pageable pageable, Long userId) {
-        Order order = orderRepository.findByIdAndUserId(orderId, userId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Order not found or does not belong to the user"));
+    public Page<OrderItemDto> findItemsByOrderId(Long orderId, Pageable pageable,
+                                                 Long userId, boolean isAdmin) {
+        Order order;
+
+        if (isAdmin) {
+            order = orderRepository.findById(orderId)
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Order not found"));
+        } else {
+            order = orderRepository.findByIdAndUserId(orderId, userId)
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Order not found or does not belong to the user"));
+        }
         List<OrderItemDto> orderItemDto = order.getOrderItems().stream()
                 .map(orderItemMapper::toDto)
                 .toList();
@@ -72,11 +81,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderItemDto findItemFormOrder(Long orderId, Long itemId, Long userId) {
-        OrderItem orderItem = orderItemRepository
-                .findByIdAndOrderIdAndUserId(itemId, orderId, userId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Order item not found or does not belong to the user"));
+    public OrderItemDto findItemFormOrder(Long orderId, Long itemId, Long userId, boolean isAdmin) {
+        OrderItem orderItem;
+        if (isAdmin) {
+            orderItem = orderItemRepository.findById(itemId)
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Order item not found"));
+        } else {
+            orderItem = orderItemRepository
+                    .findByIdAndOrderIdAndUserId(itemId, orderId, userId)
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Order item not found or does not belong to the user"));
+        }
+
         return orderItemMapper.toDto(orderItem);
     }
 }

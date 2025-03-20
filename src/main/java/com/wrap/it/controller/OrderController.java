@@ -4,6 +4,7 @@ import com.wrap.it.dto.item.order.OrderItemDto;
 import com.wrap.it.dto.order.ChangeOrderStatusRequestDto;
 import com.wrap.it.dto.order.OrderDto;
 import com.wrap.it.dto.order.PlaceOrderRequestDto;
+import com.wrap.it.model.Role;
 import com.wrap.it.model.User;
 import com.wrap.it.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,9 +47,15 @@ public class OrderController {
 
     @GetMapping
     @Operation(summary = "Get all user's orders", description = "Get page of all user's orders")
-    public Page<OrderDto> getOrders(Pageable pageable, Authentication authentication) {
+    public Page<OrderDto> getOrders(Pageable pageable,
+                                    Authentication authentication,
+                                    @RequestParam(value = "user_id",
+                                            required = false) Long userId) {
         User user = (User) authentication.getPrincipal();
-        return orderService.findOrders(pageable, user.getId());
+
+        boolean isAdmin = isAdmin(user);
+
+        return orderService.findOrders(pageable, isAdmin ? userId : user.getId());
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -66,7 +74,10 @@ public class OrderController {
                                                 Pageable pageable,
                                                 Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return orderService.findItemsByOrderId(orderId, pageable, user.getId());
+
+        boolean isAdmin = isAdmin(user);
+
+        return orderService.findItemsByOrderId(orderId, pageable, user.getId(), isAdmin);
     }
 
     @GetMapping("/{orderId}/items/{itemId}")
@@ -75,6 +86,14 @@ public class OrderController {
                                                   @PathVariable @Positive Long itemId,
                                                   Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return orderService.findItemFormOrder(orderId,itemId,user.getId());
+
+        boolean isAdmin = isAdmin(user);
+
+        return orderService.findItemFormOrder(orderId,itemId,user.getId(), isAdmin);
+    }
+
+    private boolean isAdmin(User user) {
+        return user.getRoles().stream()
+                .anyMatch(role -> role.getName().equals(Role.RoleName.ADMIN));
     }
 }

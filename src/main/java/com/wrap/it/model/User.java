@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -59,6 +60,19 @@ public class User implements UserDetails {
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted = false;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return isDeleted == user.isDeleted && Objects.equals(id, user.id)
+                && Objects.equals(phoneNumber, user.phoneNumber)
+                && Objects.equals(password, user.password)
+                && Objects.equals(firstName, user.firstName)
+                && Objects.equals(lastName, user.lastName);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

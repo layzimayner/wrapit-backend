@@ -3,10 +3,13 @@ package com.wrap.it.mapper;
 import com.wrap.it.config.MapperConfig;
 import com.wrap.it.dto.image.ImageDto;
 import com.wrap.it.dto.item.ItemDto;
+import com.wrap.it.dto.item.ItemDtoWithReviews;
 import com.wrap.it.dto.item.ItemRequest;
 import com.wrap.it.dto.item.SlimItemDto;
+import com.wrap.it.dto.review.ReviewDto;
 import com.wrap.it.model.Category;
 import com.wrap.it.model.Item;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
@@ -24,6 +27,8 @@ public interface ItemMapper {
     ItemDto toDto(Item item);
 
     SlimItemDto toSlimDto(Item item);
+
+    ItemDtoWithReviews toDtoWithReviews(Item item, List<ReviewDto> reviews);
 
     void update(@MappingTarget Item item, ItemRequest requestDto);
 

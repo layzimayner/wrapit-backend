@@ -15,7 +15,9 @@ public interface OrderService {
 
     OrderDto changeStatus(Long orderId, ChangeOrderStatusRequestDto requestDto);
 
-    Page<OrderItemDto> findItemsByOrderId(Long orderId, Pageable pageable, Long userId);
+    Page<OrderItemDto> findItemsByOrderId(Long orderId, Pageable pageable,
+                                          Long userId, boolean isAdmin);
 
-    OrderItemDto findItemFormOrder(Long orderId, Long itemId, Long userId);
+    OrderItemDto findItemFormOrder(Long orderId, Long itemId,
+                                   Long userId, boolean isAdmin);
 }

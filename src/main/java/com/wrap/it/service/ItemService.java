@@ -2,6 +2,7 @@ package com.wrap.it.service;
 
 import com.wrap.it.dto.category.CategoryItemRequest;
 import com.wrap.it.dto.item.ItemDto;
+import com.wrap.it.dto.item.ItemDtoWithReviews;
 import com.wrap.it.dto.item.ItemRequest;
 import com.wrap.it.dto.item.SlimItemDto;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,7 @@ public interface ItemService {
 
     ItemDto update(Long id, ItemRequest requestDto);
 
-    ItemDto findById(Long id);
+    ItemDtoWithReviews findById(Long id);
 
     Page<SlimItemDto> getItemsByCategoryIds(CategoryItemRequest request,
                                             Pageable pageable);

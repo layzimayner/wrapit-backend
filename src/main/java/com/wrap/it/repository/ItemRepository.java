@@ -18,12 +18,12 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     Optional<Item> findByIdWithCategories(@Param("itemId") Long itemId);
 
     @Query("""
-    SELECT i FROM Item i
-    JOIN i.categories c
-    WHERE c.id IN :categoryIds
-    GROUP BY i
-    HAVING COUNT(DISTINCT c.id) = :categoryCount
-    """)
+            SELECT i FROM Item i
+            JOIN i.categories c
+            WHERE c.id IN :categoryIds
+            GROUP BY i
+            HAVING COUNT(DISTINCT c.id) = :categoryCount
+            """)
     Page<Item> findByCategoryIdIn(@Param("categoryIds") Set<Long> categoryIds,
                                   @Param("categoryCount") long categoryCount,
                                   Pageable pageable);

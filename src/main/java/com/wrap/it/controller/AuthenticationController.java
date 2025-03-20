@@ -30,7 +30,8 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    @Operation(summary = "Login", description = "Return JWT after successful authorization")
+    @Operation(summary = "Login", description = "Return JWT and user "
+            + "info after successful authorization")
     public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
         return authenticationService.authenticate(requestDto);
     }

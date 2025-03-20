@@ -3,12 +3,16 @@ package com.wrap.it.service.impl;
 import com.wrap.it.dto.category.CategoryItemRequest;
 import com.wrap.it.dto.image.ImageDto;
 import com.wrap.it.dto.item.ItemDto;
+import com.wrap.it.dto.item.ItemDtoWithReviews;
 import com.wrap.it.dto.item.ItemRequest;
 import com.wrap.it.dto.item.SlimItemDto;
+import com.wrap.it.dto.review.ReviewDto;
 import com.wrap.it.exception.EntityNotFoundException;
 import com.wrap.it.mapper.ItemMapper;
+import com.wrap.it.mapper.ReviewMapper;
 import com.wrap.it.model.Item;
 import com.wrap.it.repository.ItemRepository;
+import com.wrap.it.repository.ReviewRepository;
 import com.wrap.it.service.ImageService;
 import com.wrap.it.service.ItemService;
 import jakarta.transaction.Transactional;
@@ -25,6 +29,8 @@ public class ItemServiceImpl implements ItemService {
     private final ItemMapper itemMapper;
     private final ItemRepository itemRepository;
     private final ImageService imageService;
+    private final ReviewMapper reviewMapper;
+    private final ReviewRepository reviewRepository;
 
     @Override
     @Transactional
@@ -68,12 +74,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto findById(Long id) {
+    public ItemDtoWithReviews findById(Long id) {
         Item item = itemRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Can't find item with id "
                         + id + " because it does not exist")
         );
-        return itemMapper.toInitDto(item,imageService.getImagesById(id));
+
+        List<ReviewDto> reviews = reviewRepository.findAllByItemId(id).stream()
+                .map(reviewMapper::toDto)
+                .toList();
+
+        return itemMapper.toDtoWithReviews(item, reviews);
     }
 
     @Override

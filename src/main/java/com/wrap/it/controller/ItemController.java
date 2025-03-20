@@ -1,6 +1,7 @@
 package com.wrap.it.controller;
 
 import com.wrap.it.dto.item.ItemDto;
+import com.wrap.it.dto.item.ItemDtoWithReviews;
 import com.wrap.it.dto.item.ItemRequest;
 import com.wrap.it.dto.item.SlimItemDto;
 import com.wrap.it.service.ItemService;
@@ -65,7 +66,7 @@ public class ItemController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get item by id", description = "Get item by id")
-    public ItemDto getItemById(@PathVariable @Positive Long id) {
+    public ItemDtoWithReviews getItemById(@PathVariable @Positive Long id) {
         return itemService.findById(id);
     }
 }

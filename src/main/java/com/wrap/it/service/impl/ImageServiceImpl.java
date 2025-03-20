@@ -1,7 +1,6 @@
 package com.wrap.it.service.impl;
 
 import com.wrap.it.dto.image.ImageDto;
-import com.wrap.it.exception.EntityNotFoundException;
 import com.wrap.it.mapper.ImageMapper;
 import com.wrap.it.model.Image;
 import com.wrap.it.model.Item;
