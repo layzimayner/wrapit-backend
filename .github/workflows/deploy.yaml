@@ -52,6 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AWS_REGION: us-east-1
+      IMAGE_URI: ${{ needs.build.outputs.IMAGE_URI }}
 
     steps:
       - name: SSH into EC2 and Deploy
