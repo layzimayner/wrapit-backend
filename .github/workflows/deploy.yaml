@@ -55,11 +55,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AWS_REGION: us-east-1
-      IMAGE_URI: ${{ needs.build.outputs.IMAGE_URI }}
 
     steps:
       - name: Debug IMAGE_URI
-        run: echo "IMAGE_URI is ${{ env.IMAGE_URI }}"
+        run: echo "IMAGE_URI is ${{ needs.build.outputs.IMAGE_URI }}"
 
       - name: SSH into EC2 and Deploy
         uses: appleboy/ssh-action@master
@@ -70,8 +69,8 @@ jobs:
           script: |
             aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 
-            echo "Pulling Docker image: ${{ env.IMAGE_URI }}"
-            docker pull ${{ env.IMAGE_URI }}
+            echo "Pulling Docker image: ${{ needs.build.outputs.IMAGE_URI }}"
+            docker pull ${{ needs.build.outputs.IMAGE_URI }}
 
             echo "Stopping and removing existing container..."
             docker stop wrapit-container || true
@@ -90,4 +89,4 @@ jobs:
               -e DB_BEHAVIOR=${{ secrets.DB_BEHAVIOR }} \
               -e LIQUIBASE_MASTER_FILE=${{ secrets.LIQUIBASE_MASTER_FILE }} \
               -e SHOW_SQL=${{ secrets.SHOW_SQL }} \
-              ${{ env.IMAGE_URI }}
+              ${{ needs.build.outputs.IMAGE_URI }}
