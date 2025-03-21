@@ -48,8 +48,7 @@ jobs:
           docker push $ECR_PUBLIC_URI:$IMAGE_TAG
 
           echo "IMAGE_URI=$ECR_PUBLIC_URI:$IMAGE_TAG" >> $GITHUB_ENV
-          echo "::set-output name=IMAGE_URI::$FULL_IMAGE_URI"
-
+          echo "::set-output name=IMAGE_URI::$ECR_PUBLIC_URI:$IMAGE_TAG"
 
   deploy:
     needs: build
@@ -80,9 +79,4 @@ jobs:
               -e ACTIVATE_LIQUIBASE=${{ secrets.ACTIVATE_LIQUIBASE }} \
               -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
               -e JWT_EXPIRATION=${{ secrets.JWT_EXPIRATION }} \
-              -e DATA_SOURCE_DRIVER_NAME=${{ secrets.DATA_SOURCE_DRIVER_NAME }} \
-              -e DB_BEHAVIOR=${{ secrets.DB_BEHAVIOR }} \
-              -e LIQUIBASE_MASTER_FILE=${{ secrets.LIQUIBASE_MASTER_FILE }} \
-              -e SHOW_SQL=${{ secrets.SHOW_SQL }} \
-              ${{ env.IMAGE_URI }}
-  
+              -e DATA_SOURCE
