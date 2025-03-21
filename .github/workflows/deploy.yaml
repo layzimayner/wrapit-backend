@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      AWS_REGION: us-east-1
+      AWS_REGION: ${{ secrets.AWS_REGION }}
       ECR_REPOSITORY: wrap-it-api
       ECR_PUBLIC_REGISTRY_ALIAS: ${{ secrets.ECR_PUBLIC_REGISTRY_ALIAS }}
 
@@ -23,12 +23,14 @@ jobs:
           registry-type: public
         env:
           AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 
       - name: Build and Push Docker Image
         run: |
           IMAGE_TAG=$(date +%s)
           
-          # Отримуємо URI для публічного ECR
           ECR_PUBLIC_URI="public.ecr.aws/$ECR_PUBLIC_REGISTRY_ALIAS/$ECR_REPOSITORY"
 
           docker build -t $ECR_REPOSITORY .
@@ -52,8 +54,22 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-            
+
             docker pull ${{ env.IMAGE_URI }}
-            docker stop naughty_mestorf || true
-            docker rm naughty_mestorf || true
-            docker run -d --name naughty_mestorf -p 80:8080 ${{ env.IMAGE_URI }}
+            docker stop wrap-it-api || true
+            docker rm wrap-it-api || true
+
+            docker run -d -p 80:8080 \
+              --name wrap-it-api \
+              -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
+              -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
+              -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
+              -e ACTIVATE_LIQUIBASE=${{ secrets.ACTIVATE_LIQUIBASE }} \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              -e JWT_EXPIRATION=${{ secrets.JWT_EXPIRATION }} \
+              -e DATA_SOURCE_DRIVER_NAME=${{ secrets.DATA_SOURCE_DRIVER_NAME }} \
+              -e DB_BEHAVIOR=${{ secrets.DB_BEHAVIOR }} \
+              -e LIQUIBASE_MASTER_FILE=${{ secrets.LIQUIBASE_MASTER_FILE }} \
+              -e SHOW_SQL=${{ secrets.SHOW_SQL }} \
+              ${{ env.IMAGE_URI }}
+  
