@@ -80,3 +80,4 @@ jobs:
               -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
               -e JWT_EXPIRATION=${{ secrets.JWT_EXPIRATION }} \
               -e DATA_SOURCE
+
