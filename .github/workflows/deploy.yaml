@@ -69,11 +69,11 @@ jobs:
             aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 
             docker pull ${{ env.IMAGE_URI }}
-            docker stop naughty_mestorf || true
-            docker rm naughty_mestorf || true
+            docker stop wrapit-container || true
+            docker rm wrapit-container || true
 
             docker run -d -p 80:8080 \
-              --name naughty_mestorf \
+              --name wrapit-container \
               -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
               -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
               -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
