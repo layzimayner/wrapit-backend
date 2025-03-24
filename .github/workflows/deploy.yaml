@@ -53,6 +53,11 @@ jobs:
       ECR_PUBLIC_REGISTRY_ALIAS: ${{ secrets.ECR_PUBLIC_REGISTRY_ALIAS }}
 
     steps:
+      - name: Debug Variables
+        run: |
+          echo "ECR_PUBLIC_REGISTRY_ALIAS: $ECR_PUBLIC_REGISTRY_ALIAS"
+          echo "ECR_REPOSITORY: $ECR_REPOSITORY"
+
       - name: SSH into EC2 and Deploy
         uses: appleboy/ssh-action@master
         with:
