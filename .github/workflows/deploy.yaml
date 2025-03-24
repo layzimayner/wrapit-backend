@@ -50,7 +50,7 @@ jobs:
     env:
       AWS_REGION: us-east-1
       ECR_REPOSITORY: wrap-it-api
-      ECR_PUBLIC_REGISTRY_ALIAS: ${{ secrets.ECR_PUBLIC_REGISTRY_ALIAS }}
+      ECR_PUBLIC_REGISTRY_ALIAS: i4e6j3b1
 
     steps:
       - name: Debug Variables
@@ -67,7 +67,6 @@ jobs:
           script: |
             aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 
-            # Оголошення змінної ECR_PUBLIC_URI
             ECR_PUBLIC_URI="public.ecr.aws/${ECR_PUBLIC_REGISTRY_ALIAS}/${ECR_REPOSITORY}"
             IMAGE_TAG="latest"
 
