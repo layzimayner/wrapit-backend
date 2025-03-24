@@ -68,10 +68,12 @@ jobs:
             aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 
             # Оголошення змінної ECR_PUBLIC_URI
-            ECR_PUBLIC_URI="public.ecr.aws/$ECR_PUBLIC_REGISTRY_ALIAS/$ECR_REPOSITORY"
+            ECR_PUBLIC_URI="public.ecr.aws/${ECR_PUBLIC_REGISTRY_ALIAS}/${ECR_REPOSITORY}"
             IMAGE_TAG="latest"
 
             echo "Pulling Docker image: $ECR_PUBLIC_URI:$IMAGE_TAG"
+            echo "ECR_PUBLIC_URI: $ECR_PUBLIC_URI"
+
             docker pull $ECR_PUBLIC_URI:$IMAGE_TAG
 
             echo "Stopping and removing existing container..."
