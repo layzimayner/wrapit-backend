@@ -18,4 +18,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<OrderItem> findItemsByOrderIds(@Param("orderIds") List<Long> orderIds);
 
     Optional<Order> findByIdAndUserId(Long orderId, Long userId);
+
+    Optional<Order> findFinishedById(Long orderId);
 }
