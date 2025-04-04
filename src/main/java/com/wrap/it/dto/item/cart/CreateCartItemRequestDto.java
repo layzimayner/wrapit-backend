@@ -10,5 +10,5 @@ public class CreateCartItemRequestDto {
     @NotNull
     private Long itemId;
     @Positive(message = "Quantity must be at least 1")
-    private int quantity;
+    private short quantity;
 }

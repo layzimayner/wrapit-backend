@@ -50,12 +50,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void delete(Long id) {
-        if (!itemRepository.existsById(id)) {
-            throw new EntityNotFoundException("Can't delete item with id "
-                    + id + " because it does not exist");
-        }
+    public ItemDto delete(Long id) {
+        Item item = itemRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Can't delete item with id "
+                        + id + " because it does not exist")
+        );
         itemRepository.deleteById(id);
+        return itemMapper.toDto(item);
     }
 
     @Override

@@ -10,4 +10,5 @@ public class UserRegistrationDto {
     private String lastName;
     private String middleName;
     private String shippingAddress;
+    private String email;
 }

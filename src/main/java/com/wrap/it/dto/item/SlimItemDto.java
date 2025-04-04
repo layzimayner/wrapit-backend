@@ -7,9 +7,9 @@ import lombok.Data;
 public class SlimItemDto {
     private Long id;
     private String name;
-    private String description;
     private BigDecimal price;
     private String mainImageUrl;
     private int totalReviews;
     private double averageRating;
+    private int quantity;
 }

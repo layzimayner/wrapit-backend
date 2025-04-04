@@ -43,7 +43,7 @@ public class ItemController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all items", description = "Get a list of all available items")
+    @Operation(summary = "Get all items", description = "Get a page of all available items")
     public Page<SlimItemDto> getAllItems(Pageable pageable) {
         return itemService.findAll(pageable);
     }
@@ -52,8 +52,8 @@ public class ItemController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete item", description = "Delete item by id")
-    public void deleteItem(@PathVariable @Positive Long id) {
-        itemService.delete(id);
+    public ItemDto deleteItem(@PathVariable @Positive Long id) {
+        return itemService.delete(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

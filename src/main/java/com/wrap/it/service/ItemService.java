@@ -13,7 +13,7 @@ public interface ItemService {
 
     Page<SlimItemDto> findAll(Pageable pageable);
 
-    void delete(Long id);
+    ItemDto delete(Long id);
 
     ItemDto update(Long id, ItemRequest requestDto);
 

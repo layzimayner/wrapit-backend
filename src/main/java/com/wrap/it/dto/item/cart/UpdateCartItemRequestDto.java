@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class UpdateCartItemRequestDto {
     @Positive(message = "Quantity must be at least 1")
-    private int quantity;
+    private short quantity;
 }
