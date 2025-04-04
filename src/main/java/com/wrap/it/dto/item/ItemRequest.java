@@ -26,4 +26,7 @@ public class ItemRequest {
 
     @NotEmpty
     private Set<Long> categoriesIds;
+
+    @Positive
+    private int quantity;
 }

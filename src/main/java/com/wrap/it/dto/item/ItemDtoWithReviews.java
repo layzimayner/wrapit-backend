@@ -19,4 +19,5 @@ public class ItemDtoWithReviews {
     private int totalReviews;
     private double averageRating;
     private List<ReviewDto> reviews;
+    private int quantity;
 }

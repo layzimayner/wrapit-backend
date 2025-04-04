@@ -54,4 +54,6 @@ public class Item {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     @ToString.Exclude
     private Set<Category> categories = new HashSet<>();
+
+    private int quantity;
 }

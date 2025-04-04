@@ -44,7 +44,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all categories", description = "Get list of all available categories")
+    @Operation(summary = "Get all categories", description = "Get page of all available categories")
     public Page<CategoryDto> getAll(Pageable pageable) {
         return categoryService.findAll(pageable);
     }
@@ -68,8 +68,8 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete category", description = "Delete category by id")
-    public void deleteCategory(@PathVariable @Positive Long id) {
-        categoryService.deleteById(id);
+    public CategoryDto deleteCategory(@PathVariable @Positive Long id) {
+        return categoryService.deleteById(id);
     }
 
     @GetMapping("/items")

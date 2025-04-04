@@ -49,6 +49,8 @@ public class User implements UserDetails {
 
     private String shippingAddress;
 
+    private String email;
+
     @ManyToMany
     @JoinTable(
             name = "users_roles",

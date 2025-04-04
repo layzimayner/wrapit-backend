@@ -31,3 +31,9 @@ databaseChangeLog:
       file: db/changelog/changes/15-create-order-items-table.yaml
   - include:
       file: db/changelog/changes/16-create-payments-table.yaml
+  - include:
+      file: db/changelog/changes/17-add-quantity-column-to-items.yaml
+  - include:
+      file: db/changelog/changes/18-add-email-column-to-users.yaml
+  - include:
+      file: db/changelog/changes/19-create-password-reset-tokens-table.yaml
