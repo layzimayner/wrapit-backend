@@ -1,17 +1,17 @@
 package com.wrap.it.annotation;
 
-import com.wrap.it.dto.user.UserRegistrationRequestDto;
+import com.wrap.it.dto.user.ChangePasswordRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class PasswordMatchesValidator
-        implements ConstraintValidator<PasswordMatches, UserRegistrationRequestDto> {
+        implements ConstraintValidator<PasswordMatches, ChangePasswordRequest> {
 
     @Override
-    public boolean isValid(UserRegistrationRequestDto dto, ConstraintValidatorContext context) {
-        if (dto.getPassword() == null || dto.getRepeatPassword() == null) {
+    public boolean isValid(ChangePasswordRequest dto, ConstraintValidatorContext context) {
+        if (dto.password() == null || dto.repeatPassword() == null) {
             return false;
         }
-        return dto.getPassword().equals(dto.getRepeatPassword());
+        return dto.password().equals(dto.repeatPassword());
     }
 }

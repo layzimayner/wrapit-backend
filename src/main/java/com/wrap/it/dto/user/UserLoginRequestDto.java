@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public record UserLoginRequestDto(
         @NotBlank
-        String phoneNumber,
+        String email,
         @NotBlank
         String password
 ) {

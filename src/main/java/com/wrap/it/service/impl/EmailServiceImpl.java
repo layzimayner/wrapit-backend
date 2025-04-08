@@ -12,11 +12,11 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
 
     @Override
-    public void sendResetCode(String email, String code) {
+    public void sendResetCode(String email, String code, String str) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject("Password recovery");
-        message.setText("Your password recovery code: " + code);
+        message.setText(str + code);
         mailSender.send(message);
     }
 }

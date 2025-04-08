@@ -14,7 +14,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: phone_number
+                  name: email
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
@@ -42,6 +42,12 @@ databaseChangeLog:
                   type: VARCHAR(255)
               - column:
                   name: is_deleted
+                  type: TINYINT(1)
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: original_password
                   type: TINYINT(1)
                   defaultValue: 0
                   constraints:
