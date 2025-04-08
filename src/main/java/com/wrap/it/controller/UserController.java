@@ -66,6 +66,7 @@ public class UserController {
     }
 
     @PostMapping("/verify-email")
+    @Operation(summary = "Confirm mail", description = "Set up new mail for the user")
     public ResponseEntity<String> verifyEmail(@RequestParam String email,
                                               @RequestParam String code,
                                               Authentication authentication) {
@@ -74,6 +75,7 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
+    @Operation(summary = "Change password", description = "Set up new password for the user")
     private ResponseEntity<String> changePassword(Authentication authentication,
                                                   @RequestBody
                                                   @Valid ChangePasswordRequest request) {
