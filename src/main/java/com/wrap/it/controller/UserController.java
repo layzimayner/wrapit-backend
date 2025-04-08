@@ -75,7 +75,8 @@ public class UserController {
 
     @PostMapping("/change-password")
     private ResponseEntity<String> changePassword(Authentication authentication,
-                                                  @RequestBody @Valid ChangePasswordRequest request) {
+                                                  @RequestBody
+                                                  @Valid ChangePasswordRequest request) {
         User user = (User) authentication.getPrincipal();
         return userService.changePassword(user, request);
     }
