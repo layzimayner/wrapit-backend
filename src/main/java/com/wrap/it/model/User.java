@@ -34,7 +34,7 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String phoneNumber;
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -49,8 +49,6 @@ public class User implements UserDetails {
 
     private String shippingAddress;
 
-    private String email;
-
     @ManyToMany
     @JoinTable(
             name = "users_roles",
@@ -63,6 +61,9 @@ public class User implements UserDetails {
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted = false;
 
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+    private boolean originalPassword = false;
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
@@ -70,7 +71,6 @@ public class User implements UserDetails {
         }
         User user = (User) o;
         return isDeleted == user.isDeleted && Objects.equals(id, user.id)
-                && Objects.equals(phoneNumber, user.phoneNumber)
                 && Objects.equals(password, user.password)
                 && Objects.equals(firstName, user.firstName)
                 && Objects.equals(lastName, user.lastName);
@@ -83,7 +83,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return phoneNumber;
+        return email;
     }
 
     @Override

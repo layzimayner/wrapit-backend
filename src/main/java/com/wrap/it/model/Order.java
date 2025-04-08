@@ -37,6 +37,9 @@ public class Order {
     private User user;
 
     @Column(nullable = false)
+    private String phoneNumber;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status = Status.IN_PROGRESS;
 

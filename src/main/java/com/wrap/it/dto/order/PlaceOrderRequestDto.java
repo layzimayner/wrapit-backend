@@ -7,4 +7,6 @@ import lombok.Data;
 public class PlaceOrderRequestDto {
     @NotBlank
     private String shippingAddress;
+    @NotBlank
+    private String phoneNumber;
 }
