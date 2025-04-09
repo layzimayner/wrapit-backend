@@ -45,26 +45,23 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserRegistrationDto save(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
-        if (userRepository.existsByEmail(requestDto.getEmail())) {
-            throw new RegistrationException("Email is already in use");
-        }
-
         if (!rateLimitService.canSendCode(requestDto.getEmail())) {
             throw new RegistrationException("Too many failed attempts. Try again later.");
         }
 
         rateLimitService.registerRequest(requestDto.getEmail());
 
+        if (!passwordService.verifyCode(requestDto.getEmail(), requestDto.getCode())) {
+            throw new RegistrationException("Invalid or expired code");
+        }
+
         User user = userMapper.toModel(requestDto);
         user.setRoles(Set.of(roleRepository.findByName(Role.RoleName.USER)));
 
-        String code = passwordService.generateCode(requestDto.getEmail());
-
-        user.setPassword(passwordEncoder.encode(code));
+        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         userRepository.save(user);
 
-        emailService.sendResetCode(requestDto.getEmail(), code,
-                "Use this code to login: ");
+        passwordService.removeCode(requestDto.getEmail());
 
         cartService.createShoppingCartForUser(user);
         return userMapper.toDto(user);
@@ -159,40 +156,60 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<String> resetPassword(ResetPasswordDto request) {
-        if (!codeAttemptService.canAttempt(request.email())) {
+        if (!codeAttemptService.canAttempt(request.getEmail())) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                     .body("Too many failed attempts. Try again later.");
         }
 
-        if (!passwordService.verifyCode(request.email(), request.code())) {
+        if (!passwordService.verifyCode(request.getEmail(), request.getCode())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired code");
         }
 
-        if (userRepository.findByEmail(request.email()).isEmpty()) {
+        if (userRepository.findByEmail(request.getEmail()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User with email " + request.email()
+                    .body("User with email " + request.getEmail()
                             + " not found");
         }
-        User user = userRepository.findByEmail(request.email()).orElseThrow(() ->
-                new EntityNotFoundException("User with email " + request.email()
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() ->
+                new EntityNotFoundException("User with email " + request.getEmail()
                     + " don't exist"));
 
-        user.setPassword(passwordEncoder.encode(request.newPassword()));
-        user.setOriginalPassword(true);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        passwordService.removeCode(request.email());
-        codeAttemptService.resetAttempts(request.email());
+        passwordService.removeCode(request.getEmail());
+        codeAttemptService.resetAttempts(request.getEmail());
 
         return ResponseEntity.ok("Password changed successfully");
     }
 
     @Override
     public ResponseEntity<String> changePassword(User user, ChangePasswordRequest request) {
-        user.setPassword(passwordEncoder.encode(request.password()));
-        user.setOriginalPassword(true);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         userRepository.save(user);
 
         return ResponseEntity.ok("Password changed successfully");
+    }
+
+    @Override
+    public ResponseEntity<String> setRegistrationEmail(String email) {
+        if (!rateLimitService.canSendCode(email)) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body("Too many requests. Try again later.");
+        }
+
+        if (userRepository.existsByEmail(email)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Email is already in use");
+        }
+
+        rateLimitService.registerRequest(email);
+
+        String resetCode = passwordService.generateCode(email);
+
+        emailService.sendResetCode(email, resetCode, "Use this code to register: ");
+
+        return ResponseEntity.ok("Code sent to email. Please also check y"
+                + "our Spam or Junk folder in case the email was filtered.");
     }
 }

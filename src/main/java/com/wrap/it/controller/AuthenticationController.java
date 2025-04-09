@@ -55,6 +55,13 @@ public class AuthenticationController {
         return userService.save(requestDto);
     }
 
+    @Operation(summary = "Set email for registration",
+            description = "Send verification code on email")
+    @PostMapping("/set-registration-email")
+    public ResponseEntity<String> setRegistrationEmail(@RequestParam String email) {
+        return userService.setRegistrationEmail(email);
+    }
+
     @PostMapping("/forgot-password")
     @Operation(summary = "Reset password", description = "Send verification code on email")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {

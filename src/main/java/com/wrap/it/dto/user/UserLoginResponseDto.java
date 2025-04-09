@@ -4,6 +4,5 @@ public record UserLoginResponseDto(String token,
                                    Long userId,
                                    String firstName,
                                    String lastName,
-                                   String email,
-                                   boolean originalPassword) {
+                                   String email) {
 }

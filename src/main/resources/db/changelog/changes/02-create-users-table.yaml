@@ -46,9 +46,3 @@ databaseChangeLog:
                   defaultValue: 0
                   constraints:
                     nullable: false
-              - column:
-                  name: original_password
-                  type: TINYINT(1)
-                  defaultValue: 0
-                  constraints:
-                    nullable: false
