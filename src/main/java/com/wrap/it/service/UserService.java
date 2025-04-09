@@ -29,4 +29,6 @@ public interface UserService {
     ResponseEntity<String> resetPassword(ResetPasswordDto request);
 
     ResponseEntity<String> changePassword(User user, ChangePasswordRequest request);
+
+    ResponseEntity<String> setRegistrationEmail(String email);
 }

@@ -1,13 +1,20 @@
 package com.wrap.it.dto.user;
 
+import com.wrap.it.annotation.PasswordMatches;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class UserRegistrationRequestDto {
+@PasswordMatches
+public class UserRegistrationRequestDto extends PasswordAwareRequest {
     @Email
     private String email;
+
+    @NotBlank
+    private String code;
 
     @NotBlank
     private String firstName;

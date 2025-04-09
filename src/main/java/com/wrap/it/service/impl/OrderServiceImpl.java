@@ -40,8 +40,12 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("User with id " + user.getId()
                     + ", has not items in cart");
         }
-        return orderMapper.toDto(orderRepository.save(orderMapper.toOrder(shoppingCart,
+        OrderDto dto = orderMapper.toDto(orderRepository.save(orderMapper.toOrder(shoppingCart,
                 requestDto.getShippingAddress(), user)));
+
+        shoppingCart.setCartItems(null);
+
+        return dto;
     }
 
     @Override

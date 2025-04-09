@@ -34,7 +34,6 @@ public class AuthenticationService {
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail(),
-                user.isOriginalPassword());
+                user.getEmail());
     }
 }
