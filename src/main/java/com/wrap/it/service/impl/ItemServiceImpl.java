@@ -42,7 +42,9 @@ public class ItemServiceImpl implements ItemService {
 
         if (optionalFromDb.isPresent()) {
             Item itemFromDb = optionalFromDb.get();
+
             if (itemFromDb.isDeleted()) {
+                itemMapper.update(itemFromDb, request);
                 itemFromDb.setDeleted(false);
                 return itemMapper.toDto(itemRepository.save(itemFromDb));
             }
@@ -65,13 +67,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto delete(Long id) {
+    public SlimItemDto delete(Long id) {
         Item item = itemRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Can't delete item with id "
                         + id + " because it does not exist")
         );
         itemRepository.deleteById(id);
-        return itemMapper.toDto(item);
+        return itemMapper.toSlimDto(item);
     }
 
     @Override

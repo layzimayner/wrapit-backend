@@ -49,10 +49,9 @@ public class ItemController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete item", description = "Delete item by id")
-    public ItemDto deleteItem(@PathVariable @Positive Long id) {
+    public SlimItemDto deleteItem(@PathVariable @Positive Long id) {
         return itemService.delete(id);
     }
 
