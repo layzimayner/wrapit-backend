@@ -29,4 +29,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     Page<Item> findByCategoryIdIn(@Param("categoryIds") Set<Long> categoryIds,
                                   @Param("categoryCount") long categoryCount,
                                   Pageable pageable);
+
+    Optional<Item> findByName(String name);
 }

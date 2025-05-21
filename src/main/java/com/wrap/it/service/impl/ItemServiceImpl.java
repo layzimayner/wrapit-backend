@@ -8,6 +8,7 @@ import com.wrap.it.dto.item.ItemRequest;
 import com.wrap.it.dto.item.SlimItemDto;
 import com.wrap.it.dto.review.ReviewDto;
 import com.wrap.it.exception.EntityNotFoundException;
+import com.wrap.it.exception.TakenNameException;
 import com.wrap.it.mapper.ItemMapper;
 import com.wrap.it.mapper.ReviewMapper;
 import com.wrap.it.model.Item;
@@ -17,6 +18,7 @@ import com.wrap.it.service.ImageService;
 import com.wrap.it.service.ItemService;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,6 +37,19 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemDto save(ItemRequest request) {
+        Optional<Item> optionalFromDb = itemRepository
+                .findByName(request.getName());
+
+        if (optionalFromDb.isPresent()) {
+            Item itemFromDb = optionalFromDb.get();
+            if (itemFromDb.isDeleted()) {
+                itemFromDb.setDeleted(false);
+                return itemMapper.toDto(itemRepository.save(itemFromDb));
+            }
+            throw new TakenNameException("Item with name " + request.getName()
+                    + " already exist");
+        }
+
         Item item = itemRepository.save(itemMapper.toModel(request));
 
         Set<ImageDto> imagesDto = imageService.save(request.getImageUrls(), item);

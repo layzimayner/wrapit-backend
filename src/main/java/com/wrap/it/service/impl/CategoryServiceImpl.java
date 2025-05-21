@@ -3,10 +3,12 @@ package com.wrap.it.service.impl;
 import com.wrap.it.dto.category.CategoryDto;
 import com.wrap.it.dto.category.CreateCategoryRequestDto;
 import com.wrap.it.exception.EntityNotFoundException;
+import com.wrap.it.exception.TakenNameException;
 import com.wrap.it.mapper.CategoryMapper;
 import com.wrap.it.model.Category;
 import com.wrap.it.repository.CategoryRepository;
 import com.wrap.it.service.CategoryService;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +36,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto save(CreateCategoryRequestDto requestDto) {
+        Optional<Category> optionalFromDb = categoryRepository
+                .findByName(requestDto.getName());
+
+        if (optionalFromDb.isPresent()) {
+            Category categoryFromDb = optionalFromDb.get();
+            if (categoryFromDb.isDeleted()) {
+                categoryFromDb.setDeleted(false);
+                return categoryMapper.toDto(categoryRepository.save(categoryFromDb));
+            }
+            throw new TakenNameException("Category with name " + requestDto.getName()
+                + " already exist");
+        }
         Category category = categoryMapper.toEntity(requestDto);
         return categoryMapper.toDto(categoryRepository.save(category));
     }
