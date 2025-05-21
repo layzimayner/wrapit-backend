@@ -38,7 +38,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public ItemDto save(ItemRequest request) {
         Optional<Item> optionalFromDb = itemRepository
-                .findByName(request.getName());
+                .findByNameIncludingDeleted(request.getName());
 
         if (optionalFromDb.isPresent()) {
             Item itemFromDb = optionalFromDb.get();

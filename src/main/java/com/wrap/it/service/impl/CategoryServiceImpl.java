@@ -37,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto save(CreateCategoryRequestDto requestDto) {
         Optional<Category> optionalFromDb = categoryRepository
-                .findByName(requestDto.getName());
+                .findByNameIncludingDeleted(requestDto.getName());
 
         if (optionalFromDb.isPresent()) {
             Category categoryFromDb = optionalFromDb.get();
