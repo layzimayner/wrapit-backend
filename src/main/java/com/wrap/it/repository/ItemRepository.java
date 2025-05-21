@@ -30,5 +30,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
                                   @Param("categoryCount") long categoryCount,
                                   Pageable pageable);
 
-    Optional<Item> findByName(String name);
+    @Query(value = "SELECT * FROM items WHERE name = :name", nativeQuery = true)
+    Optional<Item> findByNameIncludingDeleted(@Param("name") String name);
 }
