@@ -42,6 +42,8 @@ public class CategoryServiceImpl implements CategoryService {
         if (optionalFromDb.isPresent()) {
             Category categoryFromDb = optionalFromDb.get();
             if (categoryFromDb.isDeleted()) {
+                categoryFromDb.setName(requestDto.getName());
+                categoryFromDb.setDescription(requestDto.getDescription());
                 categoryFromDb.setDeleted(false);
                 return categoryMapper.toDto(categoryRepository.save(categoryFromDb));
             }
