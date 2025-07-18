@@ -27,6 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -165,14 +166,10 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired code");
         }
 
-        if (userRepository.findByEmail(request.getEmail()).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User with email " + request.getEmail()
-                            + " not found");
-        }
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() ->
-                new EntityNotFoundException("User with email " + request.getEmail()
-                    + " don't exist"));
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User with email " + request.getEmail() + " not found"));
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 

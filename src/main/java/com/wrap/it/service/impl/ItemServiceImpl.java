@@ -17,12 +17,15 @@ import com.wrap.it.repository.ReviewRepository;
 import com.wrap.it.service.ImageService;
 import com.wrap.it.service.ItemService;
 import jakarta.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -93,7 +96,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDtoWithReviews findById(Long id) {
-        Item item = itemRepository.findById(id).orElseThrow(() ->
+        Item item = itemRepository.findByIdWithCategories(id).orElseThrow(() ->
                 new EntityNotFoundException("Can't find item with id "
                         + id + " because it does not exist")
         );
@@ -106,9 +109,40 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Page<SlimItemDto> getItemsByCategoryIds(CategoryItemRequest request, Pageable pageable) {
+    public Page<SlimItemDto> getItemsByCategoryIds(CategoryItemRequest request) {
+        Pageable pageable = toPageable(request);
+
         return itemRepository.findByCategoryIdIn(request.categoryIds(),
                         request.categoryIds().size(), pageable)
                 .map(itemMapper::toSlimDto);
+    }
+
+    private Pageable toPageable(CategoryItemRequest request) {
+        if (request.sort() == null || request.sort().length == 0) {
+            return PageRequest.of(request.page(), request.size());
+        }
+
+        Sort.Order[] orders = Arrays.stream(request.sort())
+                .map(this::parseSortOrder)
+                .toArray(Sort.Order[]::new);
+
+        return PageRequest.of(request.page(), request.size(), Sort.by(orders));
+    }
+
+    private Sort.Order parseSortOrder(String sortString) {
+        String[] parts = sortString.split(",");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid sort format. Expected: 'field,direction'");
+        }
+
+        String field = parts[0].trim();
+        String direction = parts[1].trim().toLowerCase();
+
+        return switch (direction) {
+            case "asc" -> Sort.Order.asc(field);
+            case "desc" -> Sort.Order.desc(field);
+            default -> throw new IllegalArgumentException(
+                    "Invalid sort direction. Use 'asc' or 'desc'");
+        };
     }
 }
