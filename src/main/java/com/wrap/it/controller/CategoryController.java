@@ -75,8 +75,8 @@ public class CategoryController {
     @Operation(summary = "Get a page of items by category",
             description = "Returns a page of items that have the corresponding category IDs")
     public Page<SlimItemDto> getItemsByCategoryIds(
-            @RequestBody CategoryItemRequest request, Pageable pageable) {
-        return itemService.getItemsByCategoryIds(request, pageable);
+            @RequestBody CategoryItemRequest request) {
+        return itemService.getItemsByCategoryIds(request);
     }
 }
 

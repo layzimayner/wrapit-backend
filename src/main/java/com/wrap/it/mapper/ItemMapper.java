@@ -16,6 +16,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(config = MapperConfig.class)
 public interface ItemMapper {
@@ -28,6 +29,11 @@ public interface ItemMapper {
 
     SlimItemDto toSlimDto(Item item);
 
+    @Mapping(
+            target = "categoriesIds",
+            source = "item.categories",
+            qualifiedByName = "mapCategoriesToIds"
+    )
     ItemDtoWithReviews toDtoWithReviews(Item item, List<ReviewDto> reviews);
 
     void update(@MappingTarget Item item, ItemRequest requestDto);
@@ -46,5 +52,15 @@ public interface ItemMapper {
                 .map(Category::getId)
                 .collect(Collectors.toSet());
         itemDto.setCategoriesIds(categoriesIds);
+    }
+
+    @Named("mapCategoriesToIds")
+    default Set<Long> mapCategoriesToIds(Set<Category> categories) {
+        if (categories == null) {
+            return Set.of();
+        }
+        return categories.stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet());
     }
 }

@@ -12,4 +12,5 @@ public class SlimItemDto {
     private int totalReviews;
     private double averageRating;
     private int quantity;
+    private String description;
 }

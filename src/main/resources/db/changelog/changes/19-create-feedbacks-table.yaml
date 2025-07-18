@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-feedbacks-table
+      author: coder
+      changes:
+        - createTable:
+            tableName: feedbacks
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: message
+                  type: text
+
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: is_read
+                  type: TINYINT(1)
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            constraintName: fk_feedbacks_user
+            baseTableName: feedbacks
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE

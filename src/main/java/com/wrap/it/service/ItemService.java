@@ -19,6 +19,5 @@ public interface ItemService {
 
     ItemDtoWithReviews findById(Long id);
 
-    Page<SlimItemDto> getItemsByCategoryIds(CategoryItemRequest request,
-                                            Pageable pageable);
+    Page<SlimItemDto> getItemsByCategoryIds(CategoryItemRequest request);
 }

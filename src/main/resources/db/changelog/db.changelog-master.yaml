@@ -35,3 +35,5 @@ databaseChangeLog:
       file: db/changelog/changes/17-add-quantity-column-to-items.yaml
   - include:
       file: db/changelog/changes/18-create-password-reset-tokens-table.yaml
+  - include:
+      file: db/changelog/changes/19-create-feedbacks-table.yaml
