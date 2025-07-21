@@ -17,4 +17,5 @@ public class ItemDto {
     private int totalReviews;
     private double averageRating;
     private short quantity;
+    private Long version;
 }

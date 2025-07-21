@@ -39,7 +39,7 @@ public class FeedbackController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    @Operation(summary = "Leave a feedback", description = "Add new feedback to DB")
+    @Operation(summary = "Get all feedbacks", description = "Return page of unread feedbacks")
     public Page<FeedbackDto> getAllFeedbacks(Pageable pageable) {
         return feedbackService.getAll(pageable);
     }

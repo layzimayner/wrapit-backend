@@ -30,7 +30,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartDto getCart(Long userId) {
-        return cartRepository.getCartByUserId(userId)
+        return cartRepository.getCartByUserIdWithItems(userId)
                 .map(cart -> {
                     CartDto cartDto = cartMapper.toDto(cart);
                     cartDto.setCartItems(cartMapper.mapCartItemsToDto(cart.getCartItems()));
@@ -43,7 +43,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     @Override
     public CartItemDto addItemToCart(CreateCartItemRequestDto requestDto, User user) {
-        Item item = itemRepository.findByIdWithCategories(requestDto.getItemId())
+        Item item = itemRepository.findById(requestDto.getItemId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Item not found with ID: " + requestDto.getItemId()));
 
@@ -65,17 +65,15 @@ public class CartServiceImpl implements CartService {
                 .orElse(null);
 
         if (cartItem == null) {
-            cartItem = new CartItem();
-            cartItem.setShoppingCart(shoppingCart);
-            cartItem.setItem(item);
-            cartItem.setQuantity(requestDto.getQuantity());
+            cartItem = cartMapper.toModel(shoppingCart, item, requestDto.getQuantity());
             shoppingCart.getCartItems().add(cartItem);
         } else {
             cartItem.setQuantity(cartItem.getQuantity() + requestDto.getQuantity());
         }
 
         cartRepository.save(shoppingCart);
-        return cartMapper.toCartItemDto(cartItem);
+
+        return cartMapper.toCartItemDto(cartItemRepository.save(cartItem), item);
     }
 
     @Transactional
@@ -95,7 +93,7 @@ public class CartServiceImpl implements CartService {
         int newQuantity = item.getQuantity() + (cartItem.getQuantity() - requestDto.getQuantity());
 
         if (newQuantity < 0) {
-            throw new TooLargeAmountException("We don't have " + requestDto.getQuantity()
+            throw new TooLargeAmountException("Sorry we don't have " + requestDto.getQuantity()
                     + " " + item.getName() + ", only " + item.getQuantity() + " are available");
         }
 
@@ -104,26 +102,27 @@ public class CartServiceImpl implements CartService {
 
         cartItem.setQuantity(requestDto.getQuantity());
         cartItemRepository.save(cartItem);
-        return cartMapper.toCartItemDto(cartItem);
+        return cartMapper.toCartItemDto(cartItem, item);
     }
 
     @Transactional
     @Override
-    public void deleteItemFromCart(Long id, User user) {
+    public void deleteItemFromCart(Long itemId, User user) {
         ShoppingCart shoppingCart = cartRepository.getCartByUserId(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Shopping cart not found for user ID: " + user.getId()));
 
-        CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(id, shoppingCart.getId())
+        CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(itemId,
+                        shoppingCart.getId())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Cart item not found with ID: " + id + " in user's shopping cart"));
+                        "Cart item not found with ID: " + itemId + " in user's shopping cart"));
 
         Item item = cartItem.getItem();
 
         item.setQuantity(item.getQuantity() + cartItem.getQuantity());
         itemRepository.save(item);
 
-        cartItemRepository.delete(cartItem);
+        shoppingCart.getCartItems().remove(cartItem);
     }
 
     @Transactional

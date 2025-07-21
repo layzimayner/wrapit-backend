@@ -11,6 +11,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     @Query("SELECT ci FROM CartItem ci "
             + "JOIN FETCH ci.item i "
             + "JOIN ci.shoppingCart sc "
-            + "WHERE ci.id = :ItemId AND sc.id = :shoppingCartId")
+            + "WHERE ci.id = :itemId AND sc.id = :shoppingCartId")
     Optional<CartItem> findByIdAndShoppingCartId(Long itemId, Long shoppingCartId);
 }
