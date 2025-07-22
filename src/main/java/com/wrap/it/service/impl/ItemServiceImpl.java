@@ -31,6 +31,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
+    private static final Long INIT_VERSION = 1L;
+
     private final ItemMapper itemMapper;
     private final ItemRepository itemRepository;
     private final ImageService imageService;
@@ -55,7 +57,10 @@ public class ItemServiceImpl implements ItemService {
                     + " already exist");
         }
 
-        Item item = itemRepository.save(itemMapper.toModel(request));
+        Item item = itemMapper.toModel(request);
+        item.setVersion(INIT_VERSION);
+
+        item = itemRepository.save(item);
 
         Set<ImageDto> imagesDto = imageService.save(request.getImageUrls(), item);
 

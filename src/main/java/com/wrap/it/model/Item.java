@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -56,4 +57,7 @@ public class Item {
     private Set<Category> categories = new HashSet<>();
 
     private int quantity;
+
+    @Version
+    private Long version;
 }

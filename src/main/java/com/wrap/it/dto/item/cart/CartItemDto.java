@@ -4,8 +4,9 @@ import lombok.Data;
 
 @Data
 public class CartItemDto {
-    private Long id;
+    private Long cartItemId;
     private Long itemId;
     private String name;
     private Integer quantity;
+    private String description;
 }

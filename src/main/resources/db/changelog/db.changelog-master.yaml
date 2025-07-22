@@ -37,3 +37,5 @@ databaseChangeLog:
       file: db/changelog/changes/18-create-password-reset-tokens-table.yaml
   - include:
       file: db/changelog/changes/19-create-feedbacks-table.yaml
+  - include:
+      file: db/changelog/changes/19.1-add-version-field-to-items-table.yaml
