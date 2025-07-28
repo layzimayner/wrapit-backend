@@ -8,6 +8,7 @@ import com.wrap.it.dto.item.ItemRequest;
 import com.wrap.it.dto.item.SlimItemDto;
 import com.wrap.it.dto.review.ReviewDto;
 import com.wrap.it.exception.EntityNotFoundException;
+import com.wrap.it.exception.SortBuildingException;
 import com.wrap.it.exception.TakenNameException;
 import com.wrap.it.mapper.ItemMapper;
 import com.wrap.it.mapper.ReviewMapper;
@@ -69,9 +70,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Page<SlimItemDto> findAll(Pageable pageable) {
-        return itemRepository.findAll(pageable)
-                .map(itemMapper::toSlimDto);
+    public Page<SlimItemDto> findAll(CategoryItemRequest request) {
+        if (request.categoryIds() == null || request.categoryIds().isEmpty()) {
+            return itemRepository.findAll(toPageable(request))
+                    .map(itemMapper::toSlimDto);
+        } else {
+            return getItemsByCategoryIds(request);
+        }
     }
 
     @Override
@@ -113,8 +118,7 @@ public class ItemServiceImpl implements ItemService {
         return itemMapper.toDtoWithReviews(item, reviews);
     }
 
-    @Override
-    public Page<SlimItemDto> getItemsByCategoryIds(CategoryItemRequest request) {
+    private Page<SlimItemDto> getItemsByCategoryIds(CategoryItemRequest request) {
         Pageable pageable = toPageable(request);
 
         return itemRepository.findByCategoryIdIn(request.categoryIds(),
@@ -137,7 +141,7 @@ public class ItemServiceImpl implements ItemService {
     private Sort.Order parseSortOrder(String sortString) {
         String[] parts = sortString.split(",");
         if (parts.length != 2) {
-            throw new IllegalArgumentException("Invalid sort format. Expected: 'field,direction'");
+            throw new SortBuildingException("Invalid sort format. Expected: 'field,direction'");
         }
 
         String field = parts[0].trim();
@@ -146,7 +150,7 @@ public class ItemServiceImpl implements ItemService {
         return switch (direction) {
             case "asc" -> Sort.Order.asc(field);
             case "desc" -> Sort.Order.desc(field);
-            default -> throw new IllegalArgumentException(
+            default -> throw new SortBuildingException(
                     "Invalid sort direction. Use 'asc' or 'desc'");
         };
     }

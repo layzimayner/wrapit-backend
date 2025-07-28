@@ -1,9 +1,7 @@
 package com.wrap.it.controller;
 
 import com.wrap.it.dto.category.CategoryDto;
-import com.wrap.it.dto.category.CategoryItemRequest;
 import com.wrap.it.dto.category.CreateCategoryRequestDto;
-import com.wrap.it.dto.item.SlimItemDto;
 import com.wrap.it.service.CategoryService;
 import com.wrap.it.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -69,14 +67,6 @@ public class CategoryController {
     @Operation(summary = "Delete category", description = "Delete category by id")
     public CategoryDto deleteCategory(@PathVariable @Positive Long id) {
         return categoryService.deleteById(id);
-    }
-
-    @PostMapping("/items")
-    @Operation(summary = "Get a page of items by category",
-            description = "Returns a page of items that have the corresponding category IDs")
-    public Page<SlimItemDto> getItemsByCategoryIds(
-            @RequestBody CategoryItemRequest request) {
-        return itemService.getItemsByCategoryIds(request);
     }
 }
 

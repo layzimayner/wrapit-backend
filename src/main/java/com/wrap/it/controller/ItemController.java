@@ -1,5 +1,6 @@
 package com.wrap.it.controller;
 
+import com.wrap.it.dto.category.CategoryItemRequest;
 import com.wrap.it.dto.item.ItemDto;
 import com.wrap.it.dto.item.ItemDtoWithReviews;
 import com.wrap.it.dto.item.ItemRequest;
@@ -11,7 +12,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ItemController {
     private final ItemService itemService;
 
-    @PostMapping
+    @PostMapping("create")
     @Operation(summary = "Create item", description = "Add new item to DB")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,10 +42,10 @@ public class ItemController {
         return itemService.save(request);
     }
 
-    @GetMapping
+    @PostMapping
     @Operation(summary = "Get all items", description = "Get a page of all available items")
-    public Page<SlimItemDto> getAllItems(Pageable pageable) {
-        return itemService.findAll(pageable);
+    public Page<SlimItemDto> getAllItems(@RequestBody CategoryItemRequest request) {
+        return itemService.findAll(request);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
