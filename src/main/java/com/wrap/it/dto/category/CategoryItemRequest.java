@@ -12,6 +12,12 @@ public record CategoryItemRequest(Set<Long> categoryIds,
                                   @Positive(message = "Page number must be positive or zero")
                                   int page,
 
+                                  @Positive
+                                  int minPrice,
+
+                                  @Positive
+                                  int maxPrice,
+
                                   String[] sort
 ) {
 }

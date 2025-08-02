@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ItemController {
     private final ItemService itemService;
 
-    @PostMapping("create")
+    @PostMapping("/create")
     @Operation(summary = "Create item", description = "Add new item to DB")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,8 +46,12 @@ public class ItemController {
 
     @PostMapping
     @Operation(summary = "Get all items", description = "Get a page of all available items")
-    public Page<SlimItemDto> getAllItems(@RequestBody CategoryItemRequest request) {
-        return itemService.findAll(request);
+    public Page<SlimItemDto> getAllItems(@RequestBody CategoryItemRequest request,
+                                         @RequestParam(required = false,
+                                                 defaultValue = "1") BigDecimal minPrice,
+                                         @RequestParam(required = false,
+                                                 defaultValue = "1000000") BigDecimal maxPrice) {
+        return itemService.findAll(request, minPrice, maxPrice);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
