@@ -1,6 +1,7 @@
 package com.wrap.it.repository;
 
 import com.wrap.it.model.Item;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -23,12 +24,19 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             SELECT i FROM Item i
             JOIN i.categories c
             WHERE c.id IN :categoryIds
+              AND i.price >= :minPrice
+              AND i.price <= :maxPrice
             GROUP BY i
             HAVING COUNT(DISTINCT c.id) = :categoryCount
             """)
-    Page<Item> findByCategoryIdIn(@Param("categoryIds") Set<Long> categoryIds,
-                                  @Param("categoryCount") long categoryCount,
-                                  Pageable pageable);
+    Page<Item> findByCategoryIdIn(Set<Long> categoryIds,
+                                  long categoryCount,
+                                  Pageable pageable,
+                                  BigDecimal minPrice,
+                                  BigDecimal maxPrice);
+
+    @Query("SELECT i FROM Item i WHERE i.price >= :minPrice AND i.price <= :maxPrice")
+    Page<Item> findAll(Pageable pageable, BigDecimal minPrice, BigDecimal maxPrice);
 
     @Query(value = "SELECT * FROM items WHERE name = :name", nativeQuery = true)
     Optional<Item> findByNameIncludingDeleted(@Param("name") String name);

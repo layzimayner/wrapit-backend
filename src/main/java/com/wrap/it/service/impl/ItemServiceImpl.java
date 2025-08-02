@@ -18,6 +18,7 @@ import com.wrap.it.repository.ReviewRepository;
 import com.wrap.it.service.ImageService;
 import com.wrap.it.service.ItemService;
 import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -70,12 +71,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Page<SlimItemDto> findAll(CategoryItemRequest request) {
+    public Page<SlimItemDto> findAll(CategoryItemRequest request,
+                                     BigDecimal minPrice,
+                                     BigDecimal maxPrice) {
         if (request.categoryIds() == null || request.categoryIds().isEmpty()) {
-            return itemRepository.findAll(toPageable(request))
+            return itemRepository.findAll(toPageable(request), minPrice, maxPrice)
                     .map(itemMapper::toSlimDto);
         } else {
-            return getItemsByCategoryIds(request);
+            return getItemsByCategoryIds(request, minPrice, maxPrice);
         }
     }
 
@@ -118,11 +121,13 @@ public class ItemServiceImpl implements ItemService {
         return itemMapper.toDtoWithReviews(item, reviews);
     }
 
-    private Page<SlimItemDto> getItemsByCategoryIds(CategoryItemRequest request) {
+    private Page<SlimItemDto> getItemsByCategoryIds(CategoryItemRequest request,
+                                                    BigDecimal minPrice,
+                                                    BigDecimal maxPrice) {
         Pageable pageable = toPageable(request);
 
         return itemRepository.findByCategoryIdIn(request.categoryIds(),
-                        request.categoryIds().size(), pageable)
+                        request.categoryIds().size(), pageable, minPrice, maxPrice)
                 .map(itemMapper::toSlimDto);
     }
 
